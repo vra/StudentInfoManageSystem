@@ -17,6 +17,7 @@ private:
 	int age;
 	const char* name;
 	const char* id;
+	string classTable[7][13];
 };
 
 int Student::GetAge()

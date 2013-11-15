@@ -12,9 +12,9 @@ using namespace std;
 int main()
 {
 	Student stu1;
-	stu1.SetAge(23);
-	stu1.SetName("linhongwei");
-	stu1.SetID("PB11210157");
+	stu1.SetAge(43);
+	stu1.SetName("lindiaeng");
+	stu1.SetID("PB112145");
     Database ustc;
 	ustc.SetUser("root");
 	ustc.SetPassword("");
@@ -25,8 +25,15 @@ int main()
 	{
 		if(ustc.Connect())
 		{
+			/*//插入数据
 			ustc.StudentInsert(stu1);
 			cout<<"插入数据成功\n";
+			*/
+			/*//删除数据
+			ustc.StudentDelete(stu1);
+			cout<<"删除数据成功\n";
+			*/
+
 		}
 		else
 		{

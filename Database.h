@@ -13,11 +13,6 @@ class Database
 {
 public:
 	bool Connect();						//连接数据库,返回bool表示连接成功与否，类名就是数据库名字
-	bool StudentInsert(Student &stu);	// 新增学生信息
-	bool StudentDelete(Student &stu);	//删除学生信息
-	bool StudentChange(Student &stu);	//修改学生信息
-	bool StudentSelect(const char *condition);	//检索学生信息
-
 	void SetUser(const char *user0);
 	void SetPassword(const char *pswd0);
 	void SetHost(const char *host0);
@@ -25,6 +20,24 @@ public:
 
 	Database();
 	~Database();
+
+	//学生
+	bool StudentInsert(Student &stu);				// 新增学生信息
+	bool StudentDelete(Student &stu);				//删除学生信息
+	bool StudentChange(Student &stu);				//修改学生信息
+	bool StudentSelect(const char *condition);		//检索学生信息
+
+	//课表
+	bool ClassTableInsert(Student &stu);			//新增学生课表
+	bool ClassTableDelete(Student &stu);			//删除学生课表
+	bool ClassTableChange(Student &stu);			//修改学生课表信息
+	bool ClassTableSelect(const char* condition);	//检索学生信息
+
+
+
+
+
+	
 
 private:
 	const char* user;			//username
@@ -69,36 +82,25 @@ bool Database::Connect()
 }
 
 // 新增学生信息-insert into student values("name"...);
+//待完善：1.学号正确性检查2.学号为主键，避免重复输入
 bool Database::StudentInsert(Student &stu)
 {
 	int age=stu.GetAge();
-	const char* name=stu.GetName();
-	const char* id=stu.GetID();
-	const char *sentence="insert into student values(";//23,"woewangy","pb1112");
-	
-	/*char charAge[2]={'0'};//有问题
-	itoa(age,charAge,10);
-	
-	char* pAge=charAge;
-	
-	string strAge(pAge);
-	
-	*/
-	string strName=name;
-	string strId=id;
-	string strSentence=sentence;
+	string strName=stu.GetName();
+	string strId=stu.GetID();
+
+	string strSentence="insert into student values(";
+
+	//int转化为string的方法
 	ostringstream os;
 	os<<age;
-
 	strSentence+=os.str();
-	string strQuery=strSentence+",\""+strName+"\",\""+strId+"\");";
-
-	cout<<strQuery<<endl;
-
-	const char* query=strQuery.c_str();
 	
-	res=mysql_query(myCont,query);
+	//将string转化为const char*
+	string strQuery=strSentence+",\""+strName+"\",\""+strId+"\");";
+	const char* query=strQuery.c_str();
 
+	res=mysql_query(myCont,query);
 	if (!res)
 	{
 		return true;
@@ -109,12 +111,15 @@ bool Database::StudentInsert(Student &stu)
 	}
 }
 
-//删除学生信息-delete from student where name="name"
+//删除学生信息-delete from student where id="PB..."
+//待完善：1.库中无此学生的处理
 bool Database::StudentDelete(Student &stu)
 {
-	int age=stu.GetAge();
-	const char *sentence="delet e from student age="+age;
-	res=mysql_query(myCont,sentence);
+	string id=stu.GetID();
+	string sentence="delete from student where id=\""+id+"\";";
+	const char* query=sentence.c_str();
+	cout<<query<<endl;
+	res=mysql_query(myCont,query);
 	if (!res)
 	{
 		return true;
@@ -136,6 +141,8 @@ bool Database::StudentSelect(const char *condition)
 {
 	return true;
 }
+
+
 Database::Database()
 {
 }
